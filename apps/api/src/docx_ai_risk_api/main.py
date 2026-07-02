@@ -7,7 +7,10 @@ from docx_ai_risk_api.routes.health import router as health_router
 app = FastAPI(
     title="DOCX AI Risk Analyzer API",
     version="0.1.0",
-    description="Local backend for analyzing DOCX academic documents for editorial AI-risk markers.",
+    description=(
+        "Local backend for analyzing DOCX academic documents "
+        "for editorial AI-risk markers."
+    ),
 )
 
 app.add_middleware(
