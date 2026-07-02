@@ -53,7 +53,9 @@ type AnalyzeResponse = {
   limitations: string[];
 };
 
-const API_URL = "http://localhost:8000/api/v1/analyze";
+const API_URL =
+  process.env.NEXT_PUBLIC_ANALYZER_API_URL ??
+  "http://localhost:8000/api/v1/analyze";
 
 const riskLabels: Record<RiskLevel, string> = {
   low: "Низкий",
