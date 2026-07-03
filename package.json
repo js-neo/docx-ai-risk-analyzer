@@ -1,0 +1,11 @@
+{
+  "name": "docx-ai-risk-analyzer",
+  "private": true,
+  "packageManager": "pnpm@10.33.2",
+  "scripts": {
+    "web:dev": "pnpm --filter web dev",
+    "web:lint": "pnpm --filter web lint",
+    "web:typecheck": "pnpm --filter web exec tsc --noEmit",
+    "web:build": "pnpm --filter web build"
+  }
+}
