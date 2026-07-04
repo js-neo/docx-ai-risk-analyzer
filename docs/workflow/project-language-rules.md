@@ -317,7 +317,7 @@ Language rules:
 
 ## PR body, commit message and CLI
 
-Git commit message остаётся conventional commit на английском:
+Git commit messages must remain English conventional commits:
 
 ```text
 feat(api): validate upload size
@@ -325,13 +325,13 @@ refactor(web): move analyzer request to API client
 docs(workflow): align agent instructions language with route-cost standard
 ```
 
-PR title может быть английским и должен отражать commit purpose.
+PR title may be English and must reflect the commit purpose.
 
-PR body may be English-first if it is agent-facing workflow text.
+PR body may be English-first when it is agent-facing workflow text.
 
 Review comments for the Russian-speaking owner may be Russian.
 
-CLI output, CI logs, runtime logs, event names, statuses, error codes and diagnostic codes остаются на английском.
+CLI output, CI logs, runtime logs, event names, statuses, error codes and diagnostic codes must remain English.
 
 ## Мини-чеклист review языковых правил
 
