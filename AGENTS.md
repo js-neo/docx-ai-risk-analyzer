@@ -2,17 +2,17 @@
 
 # docx-ai-risk-analyzer agent instructions
 
-## Назначение
+## Purpose
 
-`AGENTS.md` фиксирует постоянный контекст для ChatGPT, Codex и других coding agents, работающих с репозиторием `docx-ai-risk-analyzer`.
+`AGENTS.md` defines durable instructions for ChatGPT, Codex and other coding agents working in the `docx-ai-risk-analyzer` repository.
 
-GitHub repository, pull requests, CI logs, review comments, roadmap documents and commit history являются источником истины. История чата используется только как вспомогательный канал анализа и не должна заменять актуальное состояние репозитория.
+GitHub repository state, pull requests, CI logs, review comments, roadmap documents and commit history are the source of truth. Chat history is an auxiliary analysis channel and must not replace repository state.
 
-Перед началом любой задачи агент обязан прочитать этот файл, актуальные workflow-документы, roadmap текущего этапа и релевантные модули из текущей ветки.
+Before starting any task, the agent must read this file, the current workflow documents, the relevant roadmap or handoff document, and the source modules affected by the task.
 
-## Обязательные документы
+## Required documents
 
-Перед implementation task, review task или planning task нужно прочитать:
+For every implementation, review or planning task, read:
 
 ```text
 AGENTS.md
@@ -21,7 +21,7 @@ docs/strategic-roadmap.md
 docs/workflow/project-language-rules.md
 ```
 
-После добавления docs navigation, PR orchestration и Codex protocol к обязательным документам также будут относиться:
+After the docs navigation index, PR orchestration and Codex protocol are added, also read:
 
 ```text
 docs/README.md
@@ -30,15 +30,15 @@ docs/workflow/codex-implementation-protocol.md
 docs/workflow/codex-prompt-template.md
 ```
 
-Если задача относится к конкретному этапу, агент также обязан прочитать актуальный roadmap, transfer snapshot или stage handoff document, если такие документы уже есть в `docs/**`.
+If a task belongs to a specific stage, also read the active roadmap, transfer snapshot or handoff document for that stage if it exists in `docs/**`.
 
 ## Project context
 
-`docx-ai-risk-analyzer` — local-first приложение для анализа академических `.docx` документов по редакционным признакам AI-risk.
+`docx-ai-risk-analyzer` is a local-first application for analyzing academic `.docx` documents by editorial AI-risk markers.
 
-Проект не доказывает AI generation. Он помогает найти языковые, структурные и статистические маркеры, которые могут требовать ручной редакторской проверки.
+The project does not prove AI generation. It identifies language, structure and statistical markers that may require manual editorial review.
 
-Текущий стек:
+Current stack:
 
 ```text
 Backend: Python, FastAPI, Pydantic, python-docx, pytest, Ruff, mypy, uv
@@ -47,60 +47,74 @@ CI: GitHub Actions
 Repository model: monorepo
 ```
 
-## Главные продуктовые инварианты
+## Language convention
 
-- Инструмент не должен утверждать, что он доказывает генерацию текста нейросетью.
-- Результат анализа является редакционной оценкой риска, а не официальным detector verdict.
-- Local-first behavior должен сохраняться по умолчанию: документ анализируется локальным backend и не сохраняется постоянно.
-- Uploaded documents являются пользовательскими данными и не должны попадать в Git, logs, screenshots, PR descriptions или test fixtures без явного разрешения.
-- Analysis result должен быть объяснимым: риск должен связываться с видимыми маркерами, статистикой или структурными признаками.
-- User-facing frontend text пишется на русском языке.
-- Machine-readable statuses, error codes and API fields остаются на английском языке.
-- API responses не должны раскрывать stack traces, internal paths или raw exception details.
-- External AI provider integration запрещён без отдельного approved architecture scope.
+Agent-facing operational instructions are English-first. This includes `AGENTS.md`, Codex protocol, PR orchestration, architecture rules, non-regression rules, required checks, Codex output requirements and Definition of done.
 
-## Языковые правила
-
-Основной источник языкового стандарта:
+Russian is required or preferred for:
 
 ```text
-docs/workflow/project-language-rules.md
+Python docstrings;
+TypeScript/JSDoc;
+module comments;
+test comments explaining regression, privacy or safety boundaries;
+frontend user-facing text;
+owner-facing roadmap explanations;
+owner-facing architecture explanations;
+manual smoke-check explanations intended for the Russian-speaking owner.
 ```
 
-Краткое правило:
+English remains required for:
 
 ```text
-Поясняющий текст пишется по-русски.
-Английский оставляется для identifiers, file paths, env names, API fields, statuses,
-error codes, commands, CI steps, conventional commits, branch names and stable engineering terms.
+code identifiers;
+type names;
+function names;
+variable names;
+file paths;
+env variable names;
+API/JSON fields;
+machine-readable statuses;
+error codes;
+diagnostic codes;
+CLI commands;
+CI/runtime logs;
+GitHub Actions step names;
+branch names;
+conventional commit messages.
 ```
 
-Документация, Python docstrings, TypeScript/JSDoc, module comments, test comments, roadmap descriptions and Codex prompt explanations должны быть преимущественно на русском.
+Stable engineering terms may remain in English when they name a concrete code-adjacent concept, test layer, CI concept, API contract, machine-readable contract or commit/workflow concept. If such terms are significant and not self-explanatory, add a Russian explanation on first use in owner-facing documents.
 
-Git commit messages остаются conventional commits на английском:
+## Product invariants
 
-```text
-feat(api): validate upload size
-refactor(web): move analyzer request to API client
-docs(workflow): add agent instructions
-```
+- The tool must not claim that it proves AI generation.
+- Analysis result is an editorial risk assessment, not an official detector verdict.
+- Local-first behavior must remain the default: uploaded documents are analyzed by the local backend and are not stored permanently.
+- Uploaded documents are user data and must not be committed, logged, copied into PR descriptions, screenshots or fixtures without explicit approval.
+- Analysis output must be explainable through visible markers, statistics or structural signals.
+- Frontend user-facing text must be Russian.
+- Machine-readable statuses, error codes and API fields must remain English.
+- API responses must not expose stack traces, internal paths or raw exception details.
+- External AI provider integration is forbidden without a separate approved architecture scope.
 
-## Правило path comment в source modules
+## Required module conventions
 
-Каждый новый или изменённый source module должен начинаться с комментария с путём файла.
+Every new or changed source module must start with a path comment.
 
-### Python
+Python example:
 
 ```python
 # apps/api/src/docx_ai_risk_api/analyzer/extraction.py
-"""Подробный module docstring на русском языке.
+"""Извлечение текста из DOCX-документов.
 
-Документирует назначение модуля, слой, входные данные, результат,
-ограничения и privacy/safety assumptions.
+Модуль относится к analyzer layer и не зависит от FastAPI или frontend-кода.
+Он извлекает paragraphs and tables и возвращает нормализованные текстовые блоки
+для дальнейшего эвристического анализа.
 """
 ```
 
-### TypeScript / TSX
+TypeScript / TSX example:
 
 ```ts
 // apps/web/src/components/analyzer-upload-form.tsx
@@ -109,69 +123,80 @@ docs(workflow): add agent instructions
 import { useState } from 'react';
 ```
 
-Если файл является client component, `'use client'` должен идти сразу после path comment.
+If a TSX file is a client component, `'use client'` must go immediately after the path comment.
 
-## Подробная документация кода
+JSDoc, module comments and Python docstrings are part of the implementation and must be preserved or expanded.
 
-Документация кода является частью реализации.
+Public contracts must remain explicit and documented.
 
-Новые и изменённые source modules должны документироваться достаточно подробно, чтобы reviewer мог понять назначение модуля, границы ответственности, входные данные, результат, ограничения и причины важных проверок без восстановления логики по всему проекту.
+Runtime safety, privacy and regression assumptions must be documented near the code that depends on them.
 
-Подробно документируются:
+Do not add dependencies unless the task explicitly requires them.
+
+Do not perform formatting-only changes outside the requested scope.
+
+## Code documentation rules
+
+Code documentation must be detailed by default.
+
+Detailed documentation does not mean commenting every line. It means that a reviewer can understand module purpose, layer ownership, inputs, outputs, limitations and safety/privacy assumptions without reconstructing the whole project from scattered files.
+
+Document in detail:
 
 ```text
-назначение backend/frontend модуля;
-место модуля в архитектуре;
-public functions, classes, Pydantic models, exported types and components;
-scoring rules и причины начисления risk score;
+backend/frontend module purpose;
+layer boundaries;
+public functions, classes and Pydantic models;
+exported frontend types, API clients and non-trivial components;
+scoring rules and risk-score reasons;
 DOCX extraction assumptions;
 privacy assumptions;
-validation and error handling branches;
+validation and error-handling branches;
 API response contracts;
 frontend API client behavior;
 export behavior;
-тесты, которые защищают важные регрессии.
+tests that protect important regressions.
 ```
 
-Не нужно комментировать очевидный синтаксис. Нужно документировать смысл, границы, ограничения, причины проверок и non-regression assumptions.
+Do not remove or shorten existing docstrings, JSDoc or comments without explicit justification.
 
-## Backend architecture boundaries
+## Backend architecture rules
 
-Backend находится в `apps/api`.
+Backend lives in `apps/api`.
 
-Ожидаемые границы:
+Expected boundaries:
 
 ```text
 apps/api/src/docx_ai_risk_api/analyzer
-→ чистая логика анализа: extraction, segmentation, dictionaries, scoring, marker matching.
+→ pure analysis logic: extraction, segmentation, dictionaries, scoring and marker matching.
 
 apps/api/src/docx_ai_risk_api/services
-→ application orchestration: analysis use cases, response assembly, coordination.
+→ application orchestration: analysis use cases, response assembly and coordination.
 
 apps/api/src/docx_ai_risk_api/routes
-→ FastAPI HTTP layer: upload handling, request validation, error mapping.
+→ FastAPI HTTP layer: upload handling, request validation and error mapping.
 
 apps/api/src/docx_ai_risk_api/schemas.py
 → Pydantic request/response contracts.
 
 apps/api/tests
-→ API smoke tests, analyzer unit tests, extraction tests, scoring regression tests.
+→ API smoke tests, analyzer unit tests, extraction tests and scoring regression tests.
 ```
 
-Правила:
+Rules:
 
-- Analyzer modules не должны импортировать FastAPI, Starlette, request objects, response objects или frontend code.
-- Route handlers должны оставаться тонкими. Если route logic растёт, orchestration переносится в `services`.
-- Pydantic models являются API contract и должны документироваться подробно.
-- Scoring behavior должен быть детерминированным и покрываться regression tests.
-- DOCX extraction должна сохранять поддержку paragraphs and tables.
-- Ошибки чтения DOCX должны возвращаться как безопасные API errors без stack traces.
+- Analyzer modules must not import FastAPI, Starlette, request objects, response objects or frontend code.
+- Route handlers must remain thin. If route logic grows, orchestration must move to `services`.
+- Pydantic models are API contracts and must be documented.
+- Scoring behavior must be deterministic and covered by regression tests.
+- DOCX extraction must preserve support for paragraphs and tables.
+- DOCX read errors must be mapped to safe API errors without stack traces.
 
-## Frontend architecture boundaries
+## Frontend architecture rules
 
-Frontend находится в `apps/web`.
+Frontend lives in `apps/web`.
 
-Ожидаемые границы:
+Expected boundaries:
 
 ```text
 apps/web/src/app
@@ -184,25 +209,25 @@ apps/web/src/lib
 → frontend API clients, helpers and shared frontend utilities.
 ```
 
-Правила:
+Rules:
 
-- UI components не должны содержать reusable low-level API request logic, если её можно вынести в `apps/web/src/lib/api`.
-- Machine-readable API values должны маппиться в русскоязычный user-facing text.
-- Error states, empty states, hints and labels пишутся на русском языке.
-- Export helpers должны явно документировать формат результата и ограничения.
+- UI components must not own reusable low-level API request logic if it can live in `apps/web/src/lib/api`.
+- Machine-readable API values must be mapped to Russian user-facing text.
+- Error states, empty states, hints and labels must be Russian.
+- Export helpers must document output format and limitations.
 
 ## Non-regression rules
 
-- Не удалять существующую функциональность.
-- Не удалять и не сокращать Python docstrings, JSDoc или module comments без явного обоснования.
-- Не удалять exported functions, classes, types, interfaces, constants, hooks or components без явного scope.
-- Не удалять fallback branches, validation branches, error handling branches or edge-case handling.
-- Не заменять конкретное поведение упрощённым placeholder.
-- Не ослаблять tests и не переписывать expected values без объяснения продуктовой причины.
-- Не менять public API contracts без явного scope.
-- Не выполнять broad refactoring внутри bug-fix или test-only commit.
-- Если модуль стал меньше, объяснить, что было extracted, куда перенесено и почему behavior/documentation preserved.
-- Если поведение intentionally removed, остановиться и запросить explicit approval.
+- Do not remove existing functionality.
+- Do not remove or shorten Python docstrings, JSDoc or module comments.
+- Do not remove exported functions, classes, types, interfaces, constants, hooks or components unless the task explicitly requires it.
+- Do not remove fallback branches, validation branches, error-handling branches or edge-case handling.
+- Do not replace specific behavior with a simplified placeholder.
+- Do not weaken tests or rewrite expected values without explaining the product reason.
+- Do not change public API contracts unless the task explicitly requires it.
+- Do not perform broad refactoring inside bug-fix, docs-only or test-only commits.
+- If a module becomes smaller, explain what was extracted, where it moved and why behavior and documentation are preserved.
+- If behavior is intentionally removed, stop and request explicit approval before finalizing the change.
 
 ## Security and privacy
 
@@ -211,22 +236,22 @@ Secrets and sensitive values must never be written to chat, documentation, Git c
 Sensitive values include:
 
 ```text
-реальные API keys;
+real API keys;
 tokens;
 private URLs;
 uploaded document content;
-личные данные из документов;
-реальные email/телефоны/адреса;
-stack traces с локальными путями или private context.
+personal data from documents;
+real emails, phone numbers or addresses;
+stack traces with local paths or private context.
 ```
 
-Разрешено документировать env variable names, если они не раскрывают значения:
+Allowed to document env variable names when values are not exposed:
 
 ```text
 NEXT_PUBLIC_ANALYZER_API_URL
 ```
 
-Запрещено использовать secret names как фактические credential values в runtime/CI configuration.
+Secret names must not be used as dummy credential values in runtime or CI configuration.
 
 ## Required checks
 
@@ -249,13 +274,13 @@ pnpm --filter web build
 
 Workflow, dependency, build or CI changes require the relevant full check set and GitHub Actions confirmation.
 
-Для docs-only changes runtime smoke checks не требуются, но `git diff` и `git status` обязательны.
+Docs-only changes do not require runtime smoke checks, but `git diff` and `git status` are required.
 
 ## GitHub PR orchestration
 
-GitHub PR является центральной точкой обмена для agent-assisted development.
+GitHub PR is the central exchange point for agent-assisted development.
 
-Ожидаемый процесс:
+Expected flow:
 
 ```text
 ChatGPT -> prepares an atomic task
@@ -266,7 +291,9 @@ ChatGPT -> reviews PR/diff/CI/comments
 Developer -> makes the final merge decision
 ```
 
-Developer остаётся final owner. Codex не принимает архитектурные решения самостоятельно и не выполняет merge.
+Issues, branches, PR comments, CI logs, review comments, roadmap documents, `AGENTS.md` and commit history are the durable shared state.
+
+The developer remains the final owner. Codex must not make final architecture decisions or merge decisions.
 
 ## Codex output requirements
 
@@ -284,7 +311,7 @@ Every Codex implementation result must include:
 9. Suggested conventional commit message.
 ```
 
-Non-regression report must explicitly state:
+The non-regression report must explicitly state:
 
 ```text
 - whether any files were deleted;
