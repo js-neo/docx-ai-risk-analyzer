@@ -86,6 +86,14 @@ conventional commit messages.
 
 Stable engineering terms may remain in English when they name a concrete code-adjacent concept, test layer, CI concept, API contract, machine-readable contract or commit/workflow concept. If such terms are significant and not self-explanatory, add a Russian explanation on first use in owner-facing documents.
 
+Audience consistency rule:
+
+- Determine the audience of each section or rule block before choosing the language.
+- Agent-facing operational rule blocks must be English-first from heading to adjacent bullets and examples.
+- Owner-facing explanations must be Russian-first, with stable engineering terms allowed in English when useful.
+- Do not mix an owner-facing Russian sentence with adjacent English operational instructions inside the same rule block unless the audience switch is explicit.
+- When fixing language issues, fix both the concrete wording and the underlying rule if the defect can repeat.
+
 ## Product invariants
 
 - The tool must not claim that it proves AI generation.

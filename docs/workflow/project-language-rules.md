@@ -29,6 +29,50 @@ Frontend user-facing text — русский.
 CLI, CI, runtime logs, API fields, statuses, error codes and commit messages — английские.
 ```
 
+## Правило консистентности audience
+
+Перед написанием или правкой section/rule block нужно сначала определить его audience.
+
+Если блок является agent-facing operational instruction, он должен быть English-first целиком: heading, body, adjacent bullets and examples. Русский в таком блоке допустим только как часть условия про русскоязычного owner/user или как пояснение стабильного термина.
+
+Если блок является owner-facing explanation, он должен быть Russian-first. Stable engineering terms могут оставаться на английском, если они называют конкретный workflow, code-adjacent concept, CI concept, API contract, machine-readable contract или conventional commit concept.
+
+Не смешивать внутри одного rule block owner-facing Russian sentence и соседние English operational instructions без явного переключения audience.
+
+Проблемный паттерн:
+
+```text
+PR title может быть английским и должен отражать commit purpose.
+
+PR body may be English-first if it is agent-facing workflow text.
+
+Review comments for the Russian-speaking owner may be Russian.
+```
+
+Почему это плохо: первая строка выглядит как owner-facing Russian explanation, а две следующие — как agent-facing English instructions. Смысл правил может быть корректным, но стиль блока неконсистентен.
+
+Корректный agent-facing вариант:
+
+```text
+PR title may be English and must reflect the commit purpose.
+
+PR body may be English-first when it is agent-facing workflow text.
+
+Review comments for the Russian-speaking owner may be Russian.
+```
+
+Корректный owner-facing вариант:
+
+```text
+PR title может быть английским и должен отражать commit purpose.
+
+PR body может быть English-first, если это agent-facing workflow text.
+
+Review comments для русскоязычного owner могут быть на русском.
+```
+
+Если найден такой дефект, нужно исправить не только конкретные строки, но и языковое правило, чтобы агент не повторял ошибку в будущих workflow-документах.
+
 ## English-first exception для AGENTS.md и workflow protocols
 
 `AGENTS.md` не обязан быть преимущественно русским. Для этого файла корректнее использовать English-first style, потому что он работает как постоянная инструкция для Codex, ChatGPT and other coding agents.
