@@ -16,15 +16,19 @@ For every implementation, review or planning task, read:
 
 ```text
 AGENTS.md
+docs/README.md
 docs/stage-1-roadmap.md
 docs/strategic-roadmap.md
 docs/workflow/project-language-rules.md
 ```
 
-After the docs navigation index, PR orchestration and Codex protocol are added, also read:
+`docs/README.md` is the documentation navigation map. It explains active entry points, directory roles, update policy, planned workflow documents and known documentation debt.
+
+When the following workflow documents are added, read them for the matching task type:
 
 ```text
-docs/README.md
+docs/workflow/project-development-rules.md
+docs/workflow/chatgpt-implementation-output-protocol.md
 docs/workflow/github-pr-orchestration.md
 docs/workflow/codex-implementation-protocol.md
 docs/workflow/codex-prompt-template.md
