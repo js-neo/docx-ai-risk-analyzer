@@ -14,25 +14,30 @@ Before starting any task, the agent must read this file, the current workflow do
 
 For every implementation, review or planning task, read:
 
-```text
+~~~text
 AGENTS.md
 docs/README.md
 docs/stage-1-roadmap.md
 docs/strategic-roadmap.md
 docs/workflow/project-language-rules.md
-```
+docs/workflow/project-development-rules.md
+~~~
 
 `docs/README.md` is the documentation navigation map. It explains active entry points, directory roles, update policy, planned workflow documents and known documentation debt.
 
+For ChatGPT chat-based implementation tasks, also read:
+
+~~~text
+docs/workflow/chatgpt-implementation-output-protocol.md
+~~~
+
 When the following workflow documents are added, read them for the matching task type:
 
-```text
-docs/workflow/project-development-rules.md
-docs/workflow/chatgpt-implementation-output-protocol.md
+~~~text
 docs/workflow/github-pr-orchestration.md
 docs/workflow/codex-implementation-protocol.md
 docs/workflow/codex-prompt-template.md
-```
+~~~
 
 If a task belongs to a specific stage, also read the active roadmap, transfer snapshot or handoff document for that stage if it exists in `docs/**`.
 
