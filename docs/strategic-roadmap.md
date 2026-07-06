@@ -1,4 +1,50 @@
+<!-- docs/strategic-roadmap.md -->
+
 # Стратегический roadmap
+
+## Версия документа
+
+```text
+Strategic roadmap version: v1.1
+Status: active strategic baseline
+Content baseline commit: 8a3836a — docs(roadmap): add anti-template editorial assistance plan
+Initial strategic baseline: 22ee3b1 — docs(roadmap): add stage 1 and strategic project roadmap
+Version metadata introduced in: 1.2.1 — docs(roadmap): add strategic roadmap version metadata
+Last updated: 06.07.2026
+Audience: Russian-speaking owner and future coding agents
+```
+
+### История версий
+
+| Версия | Commit | Назначение |
+| --- | --- | --- |
+| v1.0 | `22ee3b1` | Первичный strategic roadmap проекта, Stage 1 direction и долгосрочная структура развития |
+| v1.1 | `8a3836a` | Добавлен anti-template editorial assistance plan, анализ ритма абзацев/предложений и расширенное развитие Stage 5 |
+
+### Правила версионирования
+
+`docs/strategic-roadmap.md` версионируется отдельно от номеров коммитов и stage-коммитов.
+
+Версия повышается по следующим правилам:
+
+```text
+v1.x
+Текущая local-first стратегия DOCX analyzer сохраняется, но уточняются этапы,
+capabilities, product boundaries, workflow priorities или future directions.
+
+v2.0
+Стратегический pivot: например переход к cloud accounts, persistent storage,
+production multi-user mode, утверждённая external AI/LLM architecture или другой
+крупный product delivery shift.
+
+v3.0
+Новый продуктовый контур: например Microsoft Word add-in, desktop app,
+team workspace, browser extension или самостоятельный commercial product line.
+```
+
+Patch-level изменения внутри roadmap допустимы для correction notes, уточнения metadata, ссылок, navigation notes и исправления неточностей без изменения стратегического направления.
+
+Если меняется стратегический смысл этапов, добавляется крупное направление продукта или меняется порядок приоритетов, нужно повышать minor version и добавлять строку в историю версий.
 
 ## Видение продукта
 
