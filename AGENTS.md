@@ -37,6 +37,12 @@ For GitHub PR orchestration, PR review or CI review tasks, also read:
 docs/workflow/github-pr-orchestration.md
 ~~~
 
+For GitHub-facing PR body, Extended description or merge/review comment preparation tasks, also read:
+
+~~~text
+docs/workflow/pr-body-and-extended-description-contract.md
+~~~
+
 When the following workflow documents are added, read them for the matching task type:
 
 ~~~text
