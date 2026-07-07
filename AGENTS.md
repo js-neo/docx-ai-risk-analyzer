@@ -31,10 +31,15 @@ For ChatGPT chat-based implementation tasks, also read:
 docs/workflow/chatgpt-implementation-output-protocol.md
 ~~~
 
-When the following workflow documents are added, read them for the matching task type:
+For GitHub PR orchestration, PR review or CI review tasks, also read:
 
 ~~~text
 docs/workflow/github-pr-orchestration.md
+~~~
+
+When the following workflow documents are added, read them for the matching task type:
+
+~~~text
 docs/workflow/codex-implementation-protocol.md
 docs/workflow/codex-prompt-template.md
 ~~~
