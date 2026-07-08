@@ -297,9 +297,10 @@ docs/workflow/codex-prompt-template.md
 
 ~~~text
 1. docs/stage-1-roadmap.md остаётся English-first legacy roadmap и позже должен быть приведён к Russian-first owner-facing style.
-2. docs/workflow/codex-implementation-protocol.md ещё не создан.
-3. docs/workflow/codex-prompt-template.md ещё не создан.
-4. Backend and frontend source modules всё ещё требуют постепенного выравнивания с path comment/docstring/JSDoc rules.
+2. Часть workflow-документов, созданных до strict route-cost aligned language model, остаётся English-first legacy и должна постепенно мигрировать к Russian-first narrative + English control-plane blocks.
+3. docs/workflow/codex-implementation-protocol.md ещё не создан.
+4. docs/workflow/codex-prompt-template.md ещё не создан.
+5. Backend and frontend source modules всё ещё требуют постепенного выравнивания с path comment/docstring/JSDoc rules.
 ~~~
 
 Эти пункты не нужно исправлять в одном коммите. Они фиксируют дальнейшую последовательность и предотвращают смешение scope.
@@ -307,7 +308,6 @@ docs/workflow/codex-prompt-template.md
 ## Ближайшая рекомендуемая последовательность docs/workflow-коммитов
 
 ~~~text
-1.7 — docs(workflow): align project language rules with route-cost strict model
 1.8 — docs(workflow): add Codex implementation protocol
 1.9 — docs(workflow): add Codex prompt template
 ~~~

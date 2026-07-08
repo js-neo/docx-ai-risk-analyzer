@@ -4,187 +4,312 @@
 
 ## Назначение
 
-Этот документ фиксирует языковой стандарт проекта `docx-ai-risk-analyzer` для `AGENTS.md`, workflow-документов, Python docstrings, TypeScript/JSDoc, комментариев, тестов, frontend user-facing text, Codex prompt и Pull Request workflow.
+Этот документ фиксирует языковую модель проекта `docx-ai-risk-analyzer` для repository documentation, workflow-документов, ChatGPT/Codex workflow, GitHub-facing PR artifacts, Python docstrings, TypeScript/JSDoc, frontend user-facing text, API contracts, CI, runtime logs и machine-readable contracts.
 
-Главное уточнение: agent-facing operational instructions могут и должны быть English-first. Это относится к `AGENTS.md`, Codex protocol, PR orchestration, non-regression rules, required checks, Codex output requirements and Definition of done.
+Правило приведено к strict route-cost aligned модели: язык выбирается не только по адресату, а по функции текста.
 
-Русский язык остаётся обязательным или предпочтительным для code documentation, user-facing текста и owner-facing пояснений.
+Главная формула:
 
-## Краткий принцип
+~~~text
+Объясняем на русском.
+Управляем инструментами на английском.
+GitHub-facing PR artifacts пишем на английском.
+Пользователю показываем русский.
+Коду и машинам отдаём английский.
+~~~
 
-Не существует одного языка для всей документации. Нужно различать audience и функцию текста.
+## Базовый принцип
 
-```text
-Agent-facing operational instructions -> English-first.
-Code documentation and owner-facing explanations -> Russian-first.
-Machine-readable and code-adjacent entities -> English.
-```
+Проект использует functional language split: язык текста определяется его ролью в workflow.
 
-Иными словами:
+~~~text
+Russian-first explanatory documentation
++ English control-plane blocks
++ English GitHub-facing PR artifacts
++ English code/machine-readable contracts
++ Russian user-facing product text
+~~~
 
-```text
-AGENTS.md и Codex operational rules — преимущественно английские.
-Python docstrings, TypeScript/JSDoc, module comments and test comments — преимущественно русские.
-Frontend user-facing text — русский.
-CLI, CI, runtime logs, API fields, statuses, error codes and commit messages — английские.
-```
+Это заменяет прежнее грубое правило `Agent-facing operational instructions -> English-first`.
 
-## Правило консистентности audience
+Такое прежнее деление было недостаточно точным, потому что `AGENTS.md`, workflow protocols, roadmap notes, transfer notes и runbooks одновременно являются:
 
-Перед написанием или правкой section/rule block нужно сначала определить его audience.
+1. инструкциями для ChatGPT/Codex;
+2. governance-документами владельца проекта;
+3. handoff-контекстом для будущих сессий;
+4. source of truth для review;
+5. документацией, которую владелец проекта читает и редактирует вручную.
 
-Если блок является agent-facing operational instruction, он должен быть English-first целиком: heading, body, adjacent bullets and examples. Русский в таком блоке допустим только как часть условия про русскоязычного owner/user или как пояснение стабильного термина.
+Поэтому объясняющий слой таких документов должен быть Russian-first, а повторяемые технические control-plane blocks должны оставаться English-first.
 
-Если блок является owner-facing explanation, он должен быть Russian-first. Stable engineering terms могут оставаться на английском, если они называют конкретный workflow, code-adjacent concept, CI concept, API contract, machine-readable contract или conventional commit concept.
+## Языковая матрица
 
-Не смешивать внутри одного rule block owner-facing Russian sentence и соседние English operational instructions без явного переключения audience.
+| Тип текста | Основной язык | Правило |
+| --- | --- | --- |
+| Project overview | Russian-first | Объяснять на русском, технические имена не переводить |
+| Architecture docs | Russian-first | Русская рамка + stable engineering terms на английском |
+| Roadmap notes | Russian-first | Dated notes писать на русском |
+| Transfer/handoff notes | Russian-first | Это owner-facing durable context |
+| Runbooks | Russian-first | Объяснения на русском, команды на английском |
+| `AGENTS.md` | Russian-first narrative + English control blocks | Не делать полностью English-first |
+| Workflow docs narrative | Russian-first | Назначение, роли, риски, review policy и process explanations писать на русском |
+| Codex implementation protocol | Russian-first narrative + English control blocks | Объяснение на русском, reusable contracts на английском |
+| Codex prompt template | Russian-first wrapper + English prompt body | Описание на русском, сам prompt contract English-first |
+| Concrete Codex prompt `.txt` | English-first | Execution contract для Codex |
+| GitHub-facing PR body | English-first | Durable GitHub review artifact |
+| GitHub-facing Extended description | English-first | Durable GitHub review artifact |
+| ChatGPT review/planning в чате | Russian-first | Owner-facing discussion |
+| PR title | English | Conventional technical title |
+| Conventional commit | English | Всегда English |
+| Branch names | English | Не переводить |
+| CLI commands | English | Не переводить |
+| CI step names/logs | English | Не переводить |
+| Env variables | English uppercase | Не переводить |
+| API/DTO fields | English | Не переводить |
+| Status/error/diagnostic codes | English | Machine-readable values |
+| Runtime logs | English | Machine-readable diagnostics |
+| Code identifiers | English | Functions, classes, variables, types |
+| Python docstrings | Russian-first | Русское объяснение, code names English |
+| TypeScript/JSDoc | Russian-first | Русское объяснение, identifiers English |
+| Module comments | Russian-first | Русское объяснение архитектурного смысла |
+| Explanatory test comments | Russian-first | Regression/privacy/business rationale |
+| Test names | English or existing project style | Сохранять стиль тестового фреймворка |
+| Frontend user-facing text | Russian | Для русскоязычного продукта |
+| Validation messages shown to user | Russian | Machine-readable code remains English |
 
-Проблемный паттерн:
+## Explanatory documentation
 
-```text
-PR title может быть английским и должен отражать commit purpose.
+Explanatory documentation — это текст, который объясняет человеку смысл решения, процесса, ограничения или архитектурного выбора.
 
-PR body may be English-first if it is agent-facing workflow text.
+Писать Russian-first:
 
-Review comments for the Russian-speaking owner may be Russian.
-```
+~~~text
+назначение документа;
+бизнес-смысл slice;
+архитектурная роль изменения;
+почему commit идёт именно сейчас;
+какие boundaries фиксирует изменение;
+что сознательно не входит в scope;
+roadmap notes;
+transfer notes;
+runbook explanations;
+review rationale;
+non-regression explanation;
+module size impact explanation;
+security/privacy rationale;
+manual smoke-check instructions;
+owner-facing workflow rules.
+~~~
 
-Почему это плохо: первая строка выглядит как owner-facing Russian explanation, а две следующие — как agent-facing English instructions. Смысл правил может быть корректным, но стиль блока неконсистентен.
+Пример:
 
-Корректный agent-facing вариант:
+~~~md
+## Назначение
 
-```text
-PR title may be English and must reflect the commit purpose.
+Этот документ фиксирует порядок работы с Codex в проекте. Codex используется как implementation agent, но архитектурное решение, scope, review и merge остаются ответственностью владельца проекта.
+~~~
 
-PR body may be English-first when it is agent-facing workflow text.
+## Control-plane blocks
 
-Review comments for the Russian-speaking owner may be Russian.
-```
+Control-plane block — это структурированный блок, который управляет работой агента, GitHub, CI, review или machine-readable процесса.
 
-Корректный owner-facing вариант:
+Оставлять English-first:
 
-```text
-PR title может быть английским и должен отражать commit purpose.
+~~~text
+Project / repository:
+Current point:
+Target slice:
+Suggested branch:
+Suggested commit message:
+Suggested PR title:
+Purpose:
+Why this is needed:
+Affected runtime:
+Files to inspect first:
+Required implementation:
+Out of scope:
+Acceptance criteria:
+Required checks:
+Final report must include:
+Non-regression report:
+Module size impact:
+Ready/Merge gates:
+PR body responsibility checklist:
+~~~
 
-PR body может быть English-first, если это agent-facing workflow text.
+Причина: такие блоки являются reusable prompt / review / CI contract. Их перевод ухудшает точность и совместимость с Codex/GitHub workflow.
 
-Review comments для русскоязычного owner могут быть на русском.
-```
+## GitHub-facing PR artifacts
 
-Если найден такой дефект, нужно исправить не только конкретные строки, но и языковое правило, чтобы агент не повторял ошибку в будущих workflow-документах.
+GitHub-facing `PR body` и `Extended description` пишутся English-first.
 
-## English-first exception для AGENTS.md и workflow protocols
+Это не обычная repository documentation и не owner-facing chat explanation. Это долговечные GitHub review artifacts рядом с:
 
-`AGENTS.md` не обязан быть преимущественно русским. Для этого файла корректнее использовать English-first style, потому что он работает как постоянная инструкция для Codex, ChatGPT and other coding agents.
+~~~text
+PR title;
+conventional commit message;
+branch name;
+commit history;
+CI checks;
+review comments;
+merge decision context;
+GitHub Actions status.
+~~~
 
-English-first sections допустимы и предпочтительны для:
+Canonical PR body headings:
 
-```text
-Purpose;
-Project context;
-Architecture rules;
-Required module conventions;
-Non-regression rules;
-Security and privacy;
-GitHub PR orchestration;
-Required checks;
-Codex output requirements;
+~~~markdown
+### Motivation
+### Description
+### Testing
+### Runtime impact
+### Non-regression
+### Module size impact
+### Known limitations
+~~~
+
+ChatGPT может объяснять review verdict, request-changes rationale, approve rationale и planning в чате на русском, но copyable GitHub-facing `PR body`, `Extended description` и merge/review comment пишутся English-first.
+
+## ChatGPT owner-facing discussion
+
+ChatGPT review, planning, commit planning, request-changes rationale, approve rationale, scope discussion, risk analysis и manual local command guidance в чате пишутся Russian-first.
+
+Пример:
+
+~~~text
+Вердикт: request changes. Пока approve нельзя.
+
+Blocking issue один: новая roadmap note написана почти полностью на английском, а roadmap notes должны быть Russian-first как owner-facing durable project context.
+~~~
+
+Если ChatGPT готовит текст, который будет вставлен в GitHub, этот copyable text должен быть English-first и не должен содержать citations внутри copyable блока.
+
+## `AGENTS.md`
+
+`AGENTS.md` является agent-facing документом, но также является durable governance document владельца проекта.
+
+Рекомендуемая модель:
+
+~~~text
+AGENTS.md = Russian-first narrative + English control-plane blocks.
+~~~
+
+В `AGENTS.md` на русском пишутся:
+
+~~~text
+назначение документа;
+проектный контекст;
+продуктовые инварианты;
+архитектурные правила;
+non-regression rationale;
+privacy/safety explanations;
+роль ChatGPT/Codex/developer;
+owner-managed workflow explanation.
+~~~
+
+На английском остаются:
+
+~~~text
+file paths;
+commands;
+required checks blocks;
+Final report must include;
 Definition of done;
-branching / PR / CI workflow instructions.
-```
+field names;
+code identifiers;
+machine-readable contracts.
+~~~
 
-Русский язык в `AGENTS.md` допустим для owner-facing context, user-facing copy rules and short explanations. Но hard constraints для Codex лучше формулировать на английском, коротко и однозначно.
+## Codex prompt language
 
-## Где русский обязателен или предпочтителен
+Конкретный prompt, который передаётся Codex, лучше делать English-first, потому что это execution contract.
 
-Русский язык обязателен или предпочтителен в следующих местах:
+Внутри prompt нужно явно указывать языковые требования к создаваемым и изменяемым файлам:
 
-```text
-Python module docstrings;
-Python public function/class docstrings;
-Pydantic model explanations;
-TypeScript JSDoc for exported components/types/helpers;
-module comments;
-path-adjacent explanatory comments;
-comments explaining safety/privacy/regression reasons;
-frontend user-facing UI text;
-error messages shown to the user;
-roadmap explanations intended for the Russian-speaking owner;
-transfer notes and owner-facing handoff documents;
-manual smoke-check explanations intended for the Russian-speaking owner.
-```
+~~~text
+Language rules:
+- Markdown docs, roadmap notes, transfer notes, architecture explanations, runbooks, JSDoc/module comments and explanatory test comments must be Russian-first.
+- User-facing UI/business copy must be Russian unless the task explicitly targets an English-facing surface.
+- Codex prompt control-plane blocks, GitHub-facing PR body, Extended description, PR title, conventional commit message, branch names, CLI commands, CI step names, file paths, code identifiers, env names, API/DTO fields, statuses, error codes, diagnostic codes and runtime logs must remain English.
+- Stable engineering terms may remain English inside Russian documentation when they name concrete code-adjacent concepts.
+- Do not translate identifiers, file paths, commands, env names, API fields, error codes or diagnostic codes.
+- Do not introduce English-first roadmap notes or owner-facing explanatory docs unless the target document explicitly requires English.
+~~~
 
-## Где английский обязателен или предпочтителен
+## Code and machine-readable text
 
-Английский язык обязателен или предпочтителен в следующих местах:
+Писать на английском:
 
-```text
-AGENTS.md operational instructions;
-Codex implementation protocol;
-GitHub PR orchestration protocol;
-PR template field names;
-Codex output requirements;
-non-regression report template;
-Definition of done;
+~~~text
 code identifiers;
 type names;
 function names;
 variable names;
-file paths;
-env variable names;
-API/JSON fields;
-machine-readable values;
-statuses;
-error codes;
-diagnostic codes;
-CLI commands;
-CI logs;
-runtime logs;
-GitHub Actions step names;
+class names;
+file names;
+directory names;
+package names;
 branch names;
-conventional commit messages.
-```
-
-## Правило первого использования термина
-
-Если английский термин важен и неочевиден для русскоязычного reviewer, при первом использовании нужно дать русское пояснение в скобках.
+conventional commit messages;
+PR titles;
+env variables;
+CLI commands;
+CI job names;
+CI step names;
+API endpoint paths;
+API/DTO fields;
+database field names;
+queue names;
+event names;
+runtime log event names;
+diagnostic codes;
+error codes;
+machine-readable statuses;
+JSON keys;
+test command names;
+script names.
+~~~
 
 Примеры:
 
-```text
-runtime (контур выполнения)
-quality gate (контрольный барьер качества)
-source of truth (источник истины)
-API client (клиентский модуль для вызова API)
-false positive (ложное срабатывание)
-local-first (локальная обработка по умолчанию)
-```
+~~~text
+analyzeDocxRisk
+RiskLevelSummary
+NEXT_PUBLIC_ANALYZER_API_URL
+INVALID_DOCX_FILE
+/api/analyze
+pnpm --filter web build
+uv run pytest
+docs(workflow): align project language rules with route-cost strict model
+~~~
 
-После первого пояснения термин можно использовать короче.
+## User-facing product text
 
-## Подробность документации кода
+User-facing text — всё, что видит конечный пользователь продукта в интерфейсе или сообщениях.
 
-Документация кода в проекте должна быть подробной по умолчанию.
+Для `docx-ai-risk-analyzer` пользовательский текст пишется на русском:
 
-Подробная документация не означает комментарий к каждой строке. Она означает, что reviewer может понять назначение модуля, границы ответственности, входные данные, результат, ограничения и причины важных проверок без восстановления логики по всему проекту.
+~~~text
+UI labels;
+button text;
+form hints;
+validation messages;
+empty states;
+error explanations for user;
+support instructions;
+analysis explanations shown to the user.
+~~~
 
-Подробно документируются:
+Пример:
 
-```text
-назначение backend/frontend модуля;
-место модуля в архитектуре;
-публичные функции, классы, Pydantic models, exported types and components;
-scoring rules и причины начисления risk score;
-DOCX extraction assumptions;
-privacy assumptions;
-validation and error handling branches;
-API response contracts;
-frontend API client behavior;
-export behavior;
-тесты, которые защищают важные регрессии.
-```
+~~~json
+{
+  "code": "INVALID_DOCX_FILE",
+  "message": "Загрузите корректный DOCX-файл."
+}
+~~~
 
-Не нужно комментировать очевидные строки, например простое присваивание, импорт или стандартный `return`, если в них нет архитектурного смысла.
+Machine-readable `code` остаётся английским, user-facing `message` остаётся русским.
 
 ## Python docstrings
 
@@ -192,7 +317,7 @@ export behavior;
 
 Пример:
 
-```python
+~~~python
 # apps/api/src/docx_ai_risk_api/analyzer/extraction.py
 """Извлечение текста из DOCX-документов.
 
@@ -200,203 +325,219 @@ export behavior;
 Он извлекает paragraphs and tables и возвращает нормализованные текстовые блоки
 для дальнейшего эвристического анализа.
 """
-```
+~~~
 
 Public functions, classes, exceptions, Pydantic models and non-obvious scoring rules должны иметь русскоязычные docstrings.
 
 Docstring должен объяснять:
 
-```text
+~~~text
 назначение;
 входные данные;
 результат;
 ограничения;
 privacy или safety assumptions, если они есть;
 причину важного архитектурного разделения, если она неочевидна.
-```
+~~~
 
-Не нужно писать очевидные docstrings для маленьких внутренних функций, если они не являются публичным контрактом и не содержат важной логики.
+## TypeScript/JSDoc and module comments
 
-## Pydantic models
-
-Pydantic models являются API contract, поэтому их нужно документировать особенно внимательно.
-
-Рекомендуется использовать:
-
-```text
-docstring у модели;
-понятные имена полей;
-Field(description=...) для публичных response fields, если описание не очевидно;
-стабильные machine-readable значения;
-отсутствие stack traces и raw exception details в user-facing ответах.
-```
-
-## TypeScript, React и JSDoc
-
-Новые или изменённые exported components, API clients, exported types and non-trivial helpers должны иметь русскоязычный JSDoc или module-level comment.
+TypeScript JSDoc, module comments и explanatory comments пишутся Russian-first.
 
 Пример:
 
-```ts
-// apps/web/src/lib/api/analyzer.ts
-
+~~~ts
 /**
- * Отправляет DOCX-файл в backend API и возвращает результат анализа.
+ * Клиентский helper для отправки DOCX-файла в analyzer API.
  *
- * API client изолирует HTTP-детали от React-компонентов. Компоненты не должны
- * самостоятельно собирать URL, разбирать raw response или дублировать обработку
- * ошибок, если эта логика нужна повторно.
+ * UI-компонент не должен знать детали HTTP-запроса: он передаёт файл,
+ * а API client отвечает за request construction, safe error mapping и
+ * возврат typed response.
  */
-export async function analyzeDocument(file: File): Promise<AnalyzeResponse> {
-  // ...
-}
-```
+~~~
 
-User-facing text должен оставаться на русском языке.
+Code identifiers не переводятся.
 
-Machine-readable statuses and API fields не переводятся.
+## Test comments
 
-## Правило path comment
-
-Каждый новый или изменённый source module должен начинаться с path comment.
-
-TypeScript / TSX:
-
-```ts
-// apps/web/src/components/analyzer-upload-form.tsx
-'use client';
-
-import { useState } from 'react';
-```
-
-Python:
-
-```python
-# apps/api/src/docx_ai_risk_api/schemas.py
-"""Pydantic-контракты API анализа DOCX-документов."""
-```
-
-Если TSX-файл является client component, `'use client'` должен идти сразу после path comment.
-
-## Комментарии в тестах
-
-Названия тестов могут оставаться на английском, если они используются как machine-oriented behavior description.
-
-Комментарии и docstrings в тестах пишутся на русском языке, если они объясняют:
-
-```text
-какую регрессию защищает тест;
-какую privacy boundary нельзя нарушить;
-почему конкретное значение не должно попасть в ответ;
-почему expected value важен для scoring behavior;
-почему ошибка должна быть safe and user-facing.
-```
-
-Не использовать реальные документы, ФИО, телефоны, email, точные адреса, private file content, tokens or provider payloads в fixtures.
-
-## Frontend user-facing text
-
-Все тексты, которые видит пользователь, должны быть на русском языке:
-
-```text
-кнопки;
-подсказки;
-ошибки;
-empty states;
-summary labels;
-limitations;
-export labels;
-описания риска;
-пояснения к маркерам.
-```
-
-Machine-readable values остаются английскими:
-
-```text
-low
-medium
-high
-analyzed
-invalid-file
-```
-
-## API responses and error contracts
-
-JSON fields, statuses and error codes пишутся на английском языке.
+Explanatory test comments пишутся Russian-first, если они объясняют business rule, privacy boundary, regression rationale или safety invariant.
 
 Пример:
 
-```json
-{
-  "status": "analyzed",
-  "overall_risk": "low",
-  "risk_score": 3
-}
-```
+~~~ts
+// Проверяем, что frontend не показывает machine-readable diagnostic code
+// вместо понятного русскоязычного сообщения для пользователя.
+~~~
 
-User-facing interpretation этих значений во frontend должна быть на русском:
+Test names могут оставаться English, если таков стиль test framework или проекта.
 
-```text
-low -> Низкий
-medium -> Средний
-high -> Высокий
-```
+## Stable English terms
 
-## Codex prompt language rules
+Не нужно насильно переводить устойчивые engineering terms. Это ухудшит точность.
 
-Codex prompt может быть English-first, особенно если это implementation task.
+Допустимо оставлять внутри русскоязычной документации:
 
-Если задача затрагивает UI text, Python docstrings, JSDoc, comments, tests, roadmap или transfer notes, prompt должен явно указать языковые требования.
+~~~text
+runtime;
+scope;
+PR;
+PR body;
+Extended description;
+Codex;
+ChatGPT;
+coding agent;
+control-plane;
+route handler;
+use case;
+DTO;
+API;
+CI;
+cache;
+fallback;
+local-first;
+false positive;
+source of truth;
+quality gate;
+read model;
+risk scoring;
+DOCX extraction;
+editorial risk assessment.
+~~~
 
-Рекомендуемый блок:
+При первом важном употреблении можно дать русское пояснение.
 
-```text
-Language rules:
-- Agent-facing implementation instructions may be English-first.
-- User-facing UI text must be Russian.
-- Python docstrings, TypeScript/JSDoc, module comments and test comments must be Russian unless they are identifiers, commands, statuses, API fields or stable engineering terms.
-- Preserve or expand detailed code documentation.
-- Do not remove or shorten existing documentation without explicit justification.
-```
+Пример:
 
-## PR body, commit message and CLI
+~~~md
+`control-plane block` — это повторяемый структурированный блок, который управляет работой Codex, GitHub PR или CI и поэтому остаётся English-first.
+~~~
 
-Git commit messages must remain English conventional commits:
+## Existing legacy workflow docs
 
-```text
-feat(api): validate upload size
-refactor(web): move analyzer request to API client
-docs(workflow): align agent instructions language with route-cost standard
-```
+Некоторые workflow-документы были созданы до принятия strict route-cost aligned модели и могут оставаться преимущественно English-first.
 
-PR title may be English and must reflect the commit purpose.
+Это считается documentation debt, а не новым стандартом.
 
-PR body may be English-first when it is agent-facing workflow text.
+Новые workflow-документы и новые существенные изменения existing workflow docs должны следовать текущей модели:
 
-Review comments for the Russian-speaking owner may be Russian.
+~~~text
+Russian-first explanatory narrative;
+English-first control-plane blocks;
+English-first GitHub-facing PR artifacts;
+English code/machine-readable contracts;
+Russian user-facing product text.
+~~~
 
-CLI output, CI logs, runtime logs, event names, statuses, error codes and diagnostic codes must remain English.
+Если в будущем workflow-документ переписывается существенно, его narrative нужно постепенно переводить к Russian-first route-cost style без изменения технических identifiers и control-plane blocks.
 
-## Мини-чеклист review языковых правил
+## Антипаттерны
 
-Перед merge проверить:
+### Полностью English-first workflow docs
 
-```text
-1. AGENTS.md and Codex operational sections are clear, English-first and unambiguous.
-2. Russian is preserved for user-facing UI text and owner-facing explanations.
-3. Python docstrings, TypeScript/JSDoc and module comments are Russian unless a technical term must remain English.
-4. Commands, paths, identifiers, env names, statuses, API fields, error codes and commit messages remain English.
-5. Complex English terms have Russian explanations on first use when needed.
-6. No existing documentation was removed or shortened without explicit justification.
-7. No runtime behavior, tests or CI were changed inside language-only commits.
-```
+Плохо:
 
-## Короткая версия правила
+~~~md
+## Purpose
 
-Agent-facing operational instructions — English-first.
+This document defines how pull requests must be used as the durable coordination layer.
+~~~
 
-Code documentation and user-facing explanations — Russian-first.
+Лучше:
 
-Machine-readable and code-adjacent entities — English.
+~~~md
+## Назначение
 
-This is the route-cost-compatible language standard for `docx-ai-risk-analyzer`.
+Этот документ фиксирует, как GitHub PR используется как durable coordination layer между ChatGPT, Codex, CI и владельцем проекта.
+~~~
+
+### Полный перевод control-plane blocks
+
+Плохо:
+
+~~~text
+Проект / репозиторий:
+Целевой срез:
+Предлагаемая ветка:
+Сообщение коммита:
+~~~
+
+Лучше:
+
+~~~text
+Project / repository:
+Target slice:
+Suggested branch:
+Suggested commit message:
+~~~
+
+### Перевод identifiers
+
+Плохо:
+
+~~~text
+проанализироватьДокумент
+НЕКОРРЕКТНЫЙ_DOCX_ФАЙЛ
+~~~
+
+Лучше:
+
+~~~text
+analyzeDocument
+INVALID_DOCX_FILE
+~~~
+
+### Английские roadmap notes без необходимости
+
+Плохо:
+
+~~~md
+- 2026-07-07 — documentation workflow updated...
+~~~
+
+Лучше:
+
+~~~md
+- 07.07.2026 — обновлён documentation workflow: добавлен PR body contract и уточнено разделение GitHub-facing artifacts / owner-facing chat review.
+~~~
+
+## Review checklist
+
+При review PR проверять:
+
+~~~text
+- Markdown docs changed: are explanatory sections Russian-first?
+- Roadmap notes changed: are dated notes Russian-first?
+- Transfer notes changed: are they Russian-first?
+- Runbooks changed: are explanations Russian-first and commands English?
+- AGENTS/workflow docs changed: is narrative Russian-first and control-plane English?
+- Codex prompt blocks changed: are control-plane field names English?
+- GitHub-facing PR body / Extended description prepared: are they English-first?
+- ChatGPT review/planning in chat: is owner-facing explanation Russian-first?
+- User-facing copy changed: is visible text Russian?
+- API/DTO fields changed: are field names English?
+- Error/status codes changed: are machine-readable codes English?
+- Runtime logs changed: are log event names English?
+- JSDoc/module comments changed: are explanatory comments Russian-first?
+- Test comments changed: are business/privacy/regression explanations Russian-first?
+- Conventional commit / PR title: English?
+- Any unnecessary full-English roadmap/doc paragraph introduced?
+- Any unnecessary Russian translation of code identifiers introduced?
+~~~
+
+## Итоговое правило
+
+Проект использует functional language split: язык выбирается по функции текста.
+
+Explanatory repository documentation пишется Russian-first. К ней относятся Markdown docs, roadmap notes, transfer notes, runbooks, architecture explanations, workflow explanations, JSDoc/module comments, explanatory test comments and project governance docs.
+
+GitHub-facing PR artifacts пишутся English-first. К ним относятся финальные `PR body` и `Extended description`, которые вставляются в GitHub после review. Они должны совпадать по стилю с PR title, conventional commits, branch names, CI checks, commit history и merge decision context.
+
+ChatGPT owner-facing review and planning пишутся Russian-first. К ним относятся PR review verdicts, request-changes rationale, approve rationale, commit planning, объяснение назначения slice, risk analysis, scope discussion and owner guidance в чате.
+
+Control-plane blocks пишутся English-first. К ним относятся reusable Codex/ChatGPT prompt blocks, PR/checklist field names, required checks, final report contracts, non-regression templates, module size impact templates and Ready/Merge gates.
+
+Code-adjacent and machine-readable contracts пишутся на английском. К ним относятся code identifiers, type names, function names, variable names, file paths, branch names, conventional commit messages, PR titles, env names, CLI commands, CI step names, API/DTO fields, statuses, error codes, diagnostic codes, runtime log events and JSON keys.
+
+User-facing product text пишется на языке пользователя продукта. Для `docx-ai-risk-analyzer` UI copy, validation messages, analysis explanations and support instructions пишутся на русском.
+
+Stable engineering terms may remain English inside Russian documentation when they name exact technical concepts. Do not translate identifiers, commands, file paths, env names, API fields, statuses, error codes or diagnostic codes.

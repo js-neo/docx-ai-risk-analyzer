@@ -69,49 +69,62 @@ Repository model: monorepo
 
 ## Language convention
 
-Agent-facing operational instructions are English-first. This includes `AGENTS.md`, Codex protocol, PR orchestration, architecture rules, non-regression rules, required checks, Codex output requirements and Definition of done.
+The project uses functional language split: language is selected by the function of the text, not only by whether the text is read by an agent or a user.
 
-Russian is required or preferred for:
+Core model:
 
-```text
-Python docstrings;
-TypeScript/JSDoc;
-module comments;
-test comments explaining regression, privacy or safety boundaries;
-frontend user-facing text;
-owner-facing roadmap explanations;
-owner-facing architecture explanations;
-manual smoke-check explanations intended for the Russian-speaking owner.
-```
+~~~text
+Russian-first explanatory documentation
++ English control-plane blocks
++ English GitHub-facing PR artifacts
++ English code/machine-readable contracts
++ Russian user-facing product text
+~~~
 
-English remains required for:
+Explanatory repository documentation is Russian-first. This includes Markdown docs, roadmap notes, transfer notes, runbooks, architecture explanations, workflow explanations, JSDoc/module comments, explanatory test comments and project governance docs.
 
-```text
+Control-plane blocks are English-first. This includes reusable Codex/ChatGPT prompt blocks, PR/checklist field names, required checks, final report contracts, non-regression templates, module size impact templates and Ready/Merge gates.
+
+GitHub-facing PR artifacts are English-first. This includes final PR body, Extended description, PR title, branch name, conventional commit message and merge/review comments intended to be pasted into GitHub.
+
+ChatGPT owner-facing review, planning, request-changes rationale, approve rationale, commit planning, risk analysis and manual guidance in chat are Russian-first.
+
+User-facing product text is Russian. This includes frontend labels, button text, form hints, validation messages, empty states, error explanations shown to the user, support instructions and analysis explanations displayed to the user.
+
+Code-adjacent and machine-readable entities remain English:
+
+~~~text
 code identifiers;
 type names;
 function names;
 variable names;
 file paths;
+branch names;
+conventional commit messages;
+PR titles;
 env variable names;
-API/JSON fields;
+CLI commands;
+CI step names;
+runtime log event names;
 machine-readable statuses;
 error codes;
 diagnostic codes;
-CLI commands;
-CI/runtime logs;
-GitHub Actions step names;
-branch names;
-conventional commit messages.
-```
+API/DTO fields;
+JSON keys.
+~~~
 
-Stable engineering terms may remain in English when they name a concrete code-adjacent concept, test layer, CI concept, API contract, machine-readable contract or commit/workflow concept. If such terms are significant and not self-explanatory, add a Russian explanation on first use in owner-facing documents.
+Python docstrings, TypeScript/JSDoc, module comments and explanatory test comments are Russian-first. Code names and stable engineering terms may remain English inside Russian documentation when they name exact technical concepts.
 
-Audience consistency rule:
+Do not translate identifiers, commands, file paths, env names, API fields, statuses, error codes or diagnostic codes.
 
-- Determine the audience of each section or rule block before choosing the language.
-- Agent-facing operational rule blocks must be English-first from heading to adjacent bullets and examples.
-- Owner-facing explanations must be Russian-first, with stable engineering terms allowed in English when useful.
-- Do not mix an owner-facing Russian sentence with adjacent English operational instructions inside the same rule block unless the audience switch is explicit.
+Functional consistency rule:
+
+- Determine the function of each section or rule block before choosing the language.
+- Explanatory workflow documentation must be Russian-first, even when future coding agents will read it.
+- Control-plane blocks must be English-first from heading to adjacent bullets and examples.
+- GitHub-facing PR artifacts must be English-first.
+- Owner-facing chat explanations must be Russian-first, with stable engineering terms allowed in English when useful.
+- Do not mix Russian explanatory prose with adjacent English control-plane instructions inside the same rule block unless the function switch is explicit.
 - When fixing language issues, fix both the concrete wording and the underlying rule if the defect can repeat.
 
 ## Product invariants
